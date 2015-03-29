@@ -1,0 +1,86 @@
+
+Yleist‰
+
+Ohjelmisto on vain eritt‰in yksinkertainen luuranko ohjelmille palvelimen ja puhelimen v‰lill‰.
+
+
+
+Client
+
+Ohjelma tehty k‰ytt‰en android studio ohjelmaa.
+Ohjelma k‰ytt‰‰ http.post ja http.get toimintoja yhdist‰‰kseen palvelimeen
+
+Client l‰hett‰‰ 2 teksti muuttujaa,
+	1: kovakoodattu komento, jota palvelin k‰ytt‰‰ halutun toiminnon valitsemiseen.
+	2: K‰ytt‰j‰ antaa toisen tekstin ohjelman tekstikentt‰‰n
+
+
+clientin toiminta koodia
+
+
+	String output = viesti.getText().toString();
+            String retval="";
+            try {
+
+               HttpClient client = new DefaultHttpClient();
+                HttpPost post = new HttpPost("http://ServerIP//HarjoitusTyo/index.php");
+                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+
+                pairs.add(new BasicNameValuePair("d0", "Looppi"));
+                pairs.add(new BasicNameValuePair("d1", output));
+
+                post.setEntity(new UrlEncodedFormEntity(pairs));
+
+                ResponseHandler<String> responseHandler = new BasicResponseHandler();
+                String responseBody = client.execute(post, responseHandler);
+                retval = responseBody;
+
+            }
+            catch(Exception e)
+            {
+                retval=e.toString();
+            }
+            return retval;
+
+
+
+
+
+Server
+
+Omaan pˆyt‰koneeseen lis‰sin www palvelut (iis7)
+palvelin k‰ytt‰‰ eritt‰in yksinkertaista php tiedostoa
+
+
+
+<?php
+$adata = $_POST['d0'];
+$bdata = $_POST['d1'];
+if ($adata == "Looppi")
+    {
+        echo "Looping back information: ".$bdata;
+    }
+	else
+	{
+		echo "Command Line Error!!!";
+	}
+?>
+
+
+
+palvelimeen voi myˆs helposti lis‰t‰ tietokanta toimintoja, mutta en jaksanut omalle koneelle ruveta asentelemaan
+(alla pieni koodinp‰tk‰ miten hakea tietokannasta)
+
+$query = "SELECT id, salt FROM usertable WHERE username = '".$username."';";
+result = $link->query($query);
+while($row = mysqli_fetch_array($result)) 
+    {
+        $id = $row["id"];
+        echo "jotain tollasta";
+    }
+
+
+
+
+
+
